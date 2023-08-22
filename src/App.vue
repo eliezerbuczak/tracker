@@ -1,27 +1,51 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <main class="columns is-gapless is-multiline">
+    <div class="column is-one-quarter">
+      <BarraLateral />
+    </div>
+    <div class="column is-three-quarter">
+      <Formulario @aoSalvarTarefa="salvarTarefa"/>
+      <div class="lista">
+        <TarefA v-for="(tarefa,index) in tarefas" :key="index" :tarefa="tarefa"/>
+        <BoX v-if="listEstaVazia">
+          Você não está muito produtivo hoje :(
+        </BoX>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import BarraLateral from "@/components/BarraLateral.vue";
+import Formulario from "@/components/FormulariO.vue";
+import TarefA from "@/components/TarefA.vue";
+import ITarefa from "@/interfaces/ITarefa";
+import BoX from "@/components/BoX.vue";
 
 export default defineComponent({
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data(){
+    return {
+      tarefas: [] as ITarefa[]
+    }
+  },
+  computed:{
+    listEstaVazia():boolean{
+      return this.tarefas.length === 0
+    }
+  },
+  methods:{
+    salvarTarefa(tarefa : ITarefa){
+      this.tarefas.push(tarefa)
+    }
+  },
+  components: {BoX, TarefA, Formulario, BarraLateral}
 });
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.lista{
+  padding: 1.25rem;
 }
 </style>
